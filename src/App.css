@@ -1,0 +1,17 @@
+.navbar{
+    position: absolute;
+    width: 100%;
+}
+
+.nav-tabs{
+    position: relative;
+    width: 90%;
+}
+
+#navbar-icon{
+    display: inline-block;
+    position: relative;
+    float: left ;
+    width: 10%;
+    text-align: right;
+}

@@ -1,9 +1,9 @@
 import './App.css'
 import './components/Navbar.tsx'
-import Message from "./Message.tsx";
+import Navbar from "./components/Navbar.tsx";
 
 function App() {
-    return <div><Message/></div>
+    return <div><Navbar/></div>
 }
 
 export default App
