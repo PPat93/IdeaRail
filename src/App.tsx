@@ -1,11 +1,9 @@
 import './App.css'
+import './components/Navbar.tsx'
+import Message from "./Message.tsx";
 
 function App() {
-    return (
-        <div>
-            <h1>Welcome to My App!</h1>
-        </div>
-    );
+    return <div><Message/></div>
 }
 
 export default App
