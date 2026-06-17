@@ -2,9 +2,7 @@ import {useState} from "react";
 
 const navbarTabs = ["Main view", "In progress", "Postponed", "Completed", "Abandoned", "Impossible"];
 
-
-function Navbar() {
-
+function NavTab(tabsArr: String[]) {
     let [itemIndex, setItemIndex] = useState(-1);
 
     let createTabs = (names: String[]) => {
@@ -17,11 +15,15 @@ function Navbar() {
                 </a>
             </li>));
     }
+    return createTabs(tabsArr);
+}
+
+function Navbar() {
     return <>
         <nav className="navbar bg-body-tertiary">
             <ul className="nav nav-tabs">
 
-                {createTabs(navbarTabs)}
+                {NavTab(navbarTabs)}
 
             </ul>
             <div className="container" id="navbar-icon">
