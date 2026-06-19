@@ -1,14 +1,19 @@
 import {useState} from "react";
 
-const navbarTabs = ["Main view", "In progress", "Postponed", "Completed", "Abandoned", "Impossible"];
+interface NavbarProps {
+    tabs: string[];
+    onElementClick: (item: string) => void;
+}
 
 
-function NavTab(tabsArr: String[]) {
+function NavTab(tabsArr: string[], onElementClick: { (item: string): void }) {
     let [itemIndex, setItemIndex] = useState(-1);
 
-    let createTabs = (names: String[]) => {
+    let createTabs = (names: string[]) => {
         return names.map((item, index: number) => (
-            <li className={(itemIndex === index ? "active" : "") + " nav-item"}>
+            <li className={(itemIndex === index ? "active" : "") + " nav-item"}
+                key={index}
+                onClick={() => onElementClick(item)}>
                 <a className=" nav-link"
                    onClick={() => setItemIndex(index)}
                    aria-current="page"
@@ -19,12 +24,12 @@ function NavTab(tabsArr: String[]) {
     return createTabs(tabsArr);
 }
 
-function Navbar() {
+function Navbar({tabs, onElementClick}: NavbarProps) {
     return <>
         <nav className="navbar bg-body-tertiary">
             <ul className="nav nav-tabs">
 
-                {NavTab(navbarTabs)}
+                {NavTab(tabs, onElementClick)}
 
             </ul>
             <div className="container" id="navbar-icon">
