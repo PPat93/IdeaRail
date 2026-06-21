@@ -6,8 +6,10 @@ import Navbar from "./components/Navbar.tsx";
 function App() {
 
     const navbarTabs = ["Main view", "In progress", "Postponed", "Completed", "Abandoned", "Impossible"];
-    const logName = (item: string) => {console.log(item)}
-
+    const logName = (item: string) => {
+        item = item.toLocaleLowerCase().replace(/\s/g, "");
+        console.log(item)
+    }
 
     return <div><Navbar tabs={navbarTabs} onElementClick={logName}/></div>
 }
