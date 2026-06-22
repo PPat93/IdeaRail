@@ -32,10 +32,8 @@ function Navbar({tabs, onElementClick}: NavbarProps) {
                 {NavTab(tabs, onElementClick)}
 
             </ul>
-            <div className="container" id="navbar-icon">
-                <a className="navbar-brand" href="#">
-                    <img src="./../../public/favicon.svg" alt="Bootstrap" width="30" height="24"/>
-                </a>
+            <div className="container" id="create-btn-top">
+                <button type="button" className="btn btn-primary">Create Idea</button>
             </div>
         </nav>
     </>

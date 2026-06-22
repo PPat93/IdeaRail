@@ -1,6 +1,7 @@
 import './App.css'
 import './components/Navbar.tsx'
 import Navbar from "./components/Navbar.tsx";
+import CRUDbar from "./components/CRUDbar.tsx";
 
 
 function App() {
@@ -11,7 +12,10 @@ function App() {
         console.log(item)
     }
 
-    return <div><Navbar tabs={navbarTabs} onElementClick={logName}/></div>
+    return <div>
+        <Navbar tabs={navbarTabs} onElementClick={logName}/>
+        <div><CRUDbar/></div>
+    </div>
 }
 
 export default App

@@ -1,17 +1,17 @@
-.navbar{
+.navbar {
     position: absolute;
     width: 100%;
 }
 
-.nav-tabs{
+.nav-tabs {
     position: relative;
     width: 90%;
 }
 
-#navbar-icon{
+#create-btn-top {
     display: inline-block;
     position: relative;
-    float: left ;
+    float: left;
     width: 10%;
     text-align: right;
 }
