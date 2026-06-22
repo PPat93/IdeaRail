@@ -71,3 +71,6 @@ export default defineConfig([
   },
 ])
 ```
+
+npm install
+npx vite
