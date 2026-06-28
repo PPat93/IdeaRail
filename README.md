@@ -2,4 +2,4 @@
 `npx vite` in _IdeaRail_ dir
 
 # Run backend:
-`node app.js` in _IRBackend_ dir
+`node server.js` in _IRBackend_ dir
