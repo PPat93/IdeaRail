@@ -1,21 +1,25 @@
 const express = require('express');
-const app = express();
+const server = express();
 const router = express.Router();
+
+const dbInit = require("../IRDB/dbInit.cjs");
 
 const mainRoutes = require('./routes/mainRoutes');
 
+dbInit();
+
 // waiting for requests
-app.listen(8080, () => {
+server.listen(8080, () => {
 
     // temp debug
-    app.use((req, res, next) => {
+    server.use((req, res, next) => {
         console.log(req.method)
         console.log(req.path)
         next();
     })
 
     // set all needed headers for every response
-    app.use((req, res, next) => {
+    server.use((req, res, next) => {
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.setHeader('Access-Control-Allow-Headers',
             'Origin, X-Requested-With, Content-Type, Accept');
@@ -24,5 +28,5 @@ app.listen(8080, () => {
     })
 
     // main page
-    app.get("/main", mainRoutes);
+    server.get("/main", mainRoutes);
 })
