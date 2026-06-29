@@ -2,7 +2,11 @@ const express = require('express');
 const server = express();
 const router = express.Router();
 
+const dbInit = require("../IRDB/dbInit.cjs");
+
 const mainRoutes = require('./routes/mainRoutes');
+
+dbInit();
 
 // waiting for requests
 server.listen(8080, () => {
