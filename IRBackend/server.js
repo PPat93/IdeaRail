@@ -29,5 +29,8 @@ server.listen(8080, () => {
 
     // main page
     server.get("/main", mainRoutes);
+    server.get("/:id", mainRoutes);
     server.post("/create", mainRoutes);
+    server.put("/:id/update", mainRoutes);
+    server.delete("/:id/delete", mainRoutes);
 })
