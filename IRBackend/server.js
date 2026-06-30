@@ -29,4 +29,5 @@ server.listen(8080, () => {
 
     // main page
     server.get("/main", mainRoutes);
+    server.post("/create", mainRoutes);
 })
