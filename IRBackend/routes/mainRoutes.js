@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-
-let idea;
+const apiMethods = require("../apiMethods");
 
 router.get('/main', (req, res) => {
     console.log('get all')
-    // call backend retrieve all fcn
+    apiMethods.getAllIdeas()
     res.status(200).json({
         message: 'TEMP for data retrieval'
     });
@@ -14,7 +13,7 @@ router.get('/main', (req, res) => {
 router.get('/:id', (req, res) => {
     console.log('get single')
     console.log(req.params.id)
-    // call backend retrieve single fcn
+    apiMethods.getSingleIdea(req.params.id);
     res.status(200).json({
         message: 'Retrieve single Idea'
     });
@@ -22,12 +21,12 @@ router.get('/:id', (req, res) => {
 
 router.post('/create', (req, res) => {
     console.log('post')
-    idea = {
+    let ideaVals = {
         title: req.body.title,
         description: req.body.description,
         status: req.body.status
     }
-    // call backend create fcn
+    apiMethods.createIdea(ideaVals)
     res.status(200).json({
         message: 'Idea successfully created!'
     });
@@ -36,12 +35,12 @@ router.post('/create', (req, res) => {
 
 router.put("/:id/update", (req, res) => {
     console.log('put')
-    idea = {
+    let ideaVals = {
         title: req.body.title,
         description: req.body.description,
         status: req.body.status
     }
-    // call backend update fcn
+    apiMethods.updateIdea(req.params.id, ideaVals);
     res.status(200).json({
         message: 'Idea successfully updated!'
     })
@@ -49,7 +48,7 @@ router.put("/:id/update", (req, res) => {
 
 router.delete("/:id/delete", (req, res) => {
     console.log('delete')
-//     call delete fcn
+    apiMethods.deleteIdea(req.params.id)
     res.status(200).json({
         message: 'Idea successfully deleted!'
     })
