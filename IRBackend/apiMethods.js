@@ -1,18 +1,23 @@
-export function getAllIdeas() {
+import * as dbInit from "../IRDB/dbInit";
 
+function getAllIdeas() {
+    dbInit.retrieveDBData();
 }
 
-export function getSingleIdea(ideaId) {
-
+function getSingleIdea(ideaId) {
+    dbInit.retrieveDBData(ideaId);
 }
 
-function createIdea(idea) {
-    // idea.title
-    // idea.description
-    // idea.status
+function createIdea(ideaVals) {
+    // ideaVals.title
+    // ideaVals.description
+    // ideaVals.status
 }
 
 function updateIdea(ideaId, ideaVals) {
+    // ideaVals.title
+    // ideaVals.description
+    // ideaVals.status
 
 }
 
