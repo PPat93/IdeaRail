@@ -1,11 +1,11 @@
-import * as dbInit from "../IRDB/dbInit";
+import {retrieveDBData} from "../IRDB/dbOps.cjs";
 
 function getAllIdeas() {
-    dbInit.retrieveDBData();
+    retrieveDBData();
 }
 
 function getSingleIdea(ideaId) {
-    dbInit.retrieveDBData(ideaId);
+    retrieveDBData(ideaId);
 }
 
 function createIdea(ideaVals) {
