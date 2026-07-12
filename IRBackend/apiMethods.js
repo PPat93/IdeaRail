@@ -1,17 +1,19 @@
-import {retrieveDBData} from "../IRDB/dbOps.cjs";
+import {retrieveDBData, createIdea} from "../IRDB/dbOps.cjs";
 
 function getAllIdeas() {
-    retrieveDBData();
+    retrieveDBData().then((ideas) => {
+        // TODO sanitize ideas
+    })
 }
 
 function getSingleIdea(ideaId) {
-    retrieveDBData(ideaId);
+    retrieveDBData(ideaId).then((idea) => {
+        //TODO sanitize idea
+    })
 }
 
-function createIdea(ideaVals) {
-    // ideaVals.title
-    // ideaVals.description
-    // ideaVals.status
+function createNewIdea(ideaVals) {
+    createIdea(ideaVals);
 }
 
 function updateIdea(ideaId, ideaVals) {
@@ -28,7 +30,7 @@ function deleteIdea(ideaId) {
 const apiMethods = {
     getAllIdeas,
     getSingleIdea,
-    createIdea,
+    createNewIdea,
     updateIdea,
     deleteIdea
 }

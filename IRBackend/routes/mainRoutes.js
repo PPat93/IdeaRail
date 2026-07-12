@@ -26,7 +26,7 @@ router.post('/create', (req, res) => {
         description: req.body.description,
         status: req.body.status
     }
-    apiMethods.createIdea(ideaVals)
+    apiMethods.createNewIdea(ideaVals)
     res.status(200).json({
         message: 'Idea successfully created!'
     });

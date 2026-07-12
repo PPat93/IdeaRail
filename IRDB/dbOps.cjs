@@ -6,7 +6,12 @@ export function retrieveDBData(ideaId) {
         retrievedDataArg = " WHERE identifier = " + ideaId;
     }
 
-    return db.run("SELECT * FROM ideas" + retrievedDataArg);
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM ideas" + retrievedDataArg, (err, rows) => {
+            if (err) reject(err);
+            else resolve(rows);
+        })
+    });
 }
 
 export function createIdea(ideaObj) {
