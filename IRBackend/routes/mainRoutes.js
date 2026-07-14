@@ -24,7 +24,9 @@ router.post('/create', (req, res) => {
     let ideaVals = {
         title: req.body.title,
         description: req.body.description,
-        status: req.body.status
+        status: req.body.status,
+        progress: req.body.progress,
+        estimation: req.body.estimation
     }
     apiMethods.createNewIdea(ideaVals)
     res.status(200).json({

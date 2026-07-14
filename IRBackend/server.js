@@ -1,7 +1,7 @@
 const express = require('express');
 const server = express();
 const router = express.Router();
-import {dbInit} from "../IRDB/dbUtils"
+const {dbInit} = require("../IRDB/dbUtils.cjs")
 
 const mainRoutes = require('./routes/mainRoutes');
 

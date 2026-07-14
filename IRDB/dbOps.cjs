@@ -1,6 +1,6 @@
-import {db, dbInsertIdea, dbInsertProgress} from "./dbUtils.cjs";
+const {db, dbInsertIdea, dbInsertProgress, dbUpdateIdea} = require("./dbUtils.cjs");
 
-export function retrieveDBData(ideaId) {
+function retrieveDBData(ideaId) {
     let retrievedDataArg = "";
     if (typeof ideaId !== "undefined") {
         retrievedDataArg = " WHERE identifier = " + ideaId;
@@ -14,9 +14,30 @@ export function retrieveDBData(ideaId) {
     });
 }
 
-export function createIdea(ideaObj) {
+function createIdea(ideaObj) {
     const newIdentifier = "idea" + Date.now();
-    db.run(dbInsertIdea, [ideaObj.title, ideaObj.description, ideaObj.status, newIdentifier], function (err) {
+    db.serialize(() => {
+        db.run(dbInsertIdea, [ideaObj.title, ideaObj.description, ideaObj.status, newIdentifier], function (err) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log("New ID:", this.lastID);
+        });
+        db.run(dbInsertProgress, [ideaObj.progress, ideaObj.estimation], function (err) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log("Progress added.");
+        });
+
+    })
+}
+
+function updateIdea(ideaId, ideaVals) {
+
+    db.run(dbUpdateIdea, [ideaVals.title, ideaVals.description, ideaVals.status], function (err) {
         if (err) {
             console.error(err);
             return;
@@ -24,4 +45,10 @@ export function createIdea(ideaObj) {
 
         console.log("New ID:", this.lastID);
     });
+}
+
+module.exports = {
+    retrieveDBData,
+    createIdea,
+    updateIdea
 }

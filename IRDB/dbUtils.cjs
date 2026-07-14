@@ -1,13 +1,14 @@
 const sqlite3 = require("sqlite3").verbose();
 
-export let db;
+let db;
 
-export const dbInsertIdea = "INSERT INTO ideas VALUES (?, ?, ?, ?)";
-export const dbInsertProgress = "INSERT INTO progress VALUES (?, ?)";
+const dbInsertIdea = "INSERT INTO ideas(title, description, status, identifier)  VALUES(?, ?, ?, ?)";
+const dbInsertProgress = "INSERT INTO progress(progress, estimation) VALUES (?, ?)";
+const dbUpdateIdea = "UPDATE ideas SET title = ?, description = ?, status = ? WHERE identifier = ?";
 
 
 // DB init
-export function dbInit() {
+function dbInit() {
     db = new sqlite3.Database('./ideaDB.db');
 
     db.serialize(() => {
@@ -36,4 +37,12 @@ export function dbInit() {
         };
         checkData()
     })
+}
+
+module.exports = {
+    db,
+    dbInsertIdea,
+    dbUpdateIdea,
+    dbInsertProgress,
+    dbInit,
 }

@@ -1,4 +1,4 @@
-import {retrieveDBData, createIdea} from "../IRDB/dbOps.cjs";
+const {retrieveDBData, createIdea} = require("../IRDB/dbOps.cjs");
 
 function getAllIdeas() {
     retrieveDBData().then((ideas) => {
@@ -27,12 +27,10 @@ function deleteIdea(ideaId) {
 
 }
 
-const apiMethods = {
+module.exports = {
     getAllIdeas,
     getSingleIdea,
     createNewIdea,
     updateIdea,
     deleteIdea
 }
-
-export default apiMethods;
