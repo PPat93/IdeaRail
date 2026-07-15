@@ -3,8 +3,9 @@ const sqlite3 = require("sqlite3").verbose();
 let db;
 
 const dbInsertIdea = "INSERT INTO ideas(title, description, status, identifier)  VALUES(?, ?, ?, ?)";
-const dbInsertProgress = "INSERT INTO progress(progress, estimation) VALUES (?, ?)";
+const dbInsertProgress = "INSERT INTO progress(progress, estimation, identifier) VALUES (?, ?, ?)";
 const dbUpdateIdea = "UPDATE ideas SET title = ?, description = ?, status = ? WHERE identifier = ?";
+const dbUpdateProgress = "UPDATE progress SET progress = ?, estimation = ? WHERE identifier = ?";
 
 
 // DB init
@@ -13,7 +14,7 @@ function dbInit() {
 
     db.serialize(() => {
         db.run("CREATE TABLE IF NOT EXISTS ideas (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, status INT, identifier TEXT)");
-        db.run("CREATE TABLE IF NOT EXISTS progress (id INTEGER PRIMARY KEY AUTOINCREMENT, progress INT, estimation TEXT)");
+        db.run("CREATE TABLE IF NOT EXISTS progress (id INTEGER PRIMARY KEY AUTOINCREMENT, progress INT, estimation TEXT, identifier TEXT)");
 
         // TEMPORARY Data addition
         const dummyDataIdeas = db.prepare(dbInsertIdea);
@@ -24,10 +25,13 @@ function dbInit() {
             db.get("SELECT id FROM ideas", (err, rows) => {
 
                 if (rows === undefined) {
-                    dummyDataIdeas.run('First idea', 'Some description of the first idea', 2, 'idea' + Date.now());
-                    dummyDataProgress.run(0, '2027-12-31');
-                    dummyDataIdeas.run('Idea number two', 'A long idea that needs a bit longer description, maybe some bullets would be good?', 2, 'idea' + (Date.now() + 1));
-                    dummyDataProgress.run(0, '2027-05-12');
+                    const identifier1 = 'idea' + Date.now();
+                    dummyDataIdeas.run('First idea', 'Some description of the first idea', 2, identifier1);
+                    dummyDataProgress.run(0, '2027-12-31', identifier1);
+
+                    const identifier2 = 'idea' + (Date.now() + 1);
+                    dummyDataIdeas.run('Idea number two', 'A long idea that needs a bit longer description, maybe some bullets would be good?', 2, identifier2);
+                    dummyDataProgress.run(0, '2027-05-12', identifier2);
 
                     dummyDataIdeas.finalize();
                     dummyDataProgress.finalize();
@@ -44,5 +48,6 @@ module.exports = {
     dbInsertIdea,
     dbUpdateIdea,
     dbInsertProgress,
+    dbUpdateProgress,
     dbInit,
 }

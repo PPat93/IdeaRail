@@ -1,6 +1,6 @@
-const {db, dbInsertIdea, dbInsertProgress, dbUpdateIdea} = require("./dbUtils.cjs");
+const {db, dbInsertIdea, dbInsertProgress, dbUpdateIdea, dbUpdateProgress} = require("./dbUtils.cjs");
 
-function retrieveDBData(ideaId) {
+function retrieveDataDB(ideaId) {
     let retrievedDataArg = "";
     if (typeof ideaId !== "undefined") {
         retrievedDataArg = " WHERE identifier = " + ideaId;
@@ -14,41 +14,97 @@ function retrieveDBData(ideaId) {
     });
 }
 
-function createIdea(ideaObj) {
+function createIdeaDB(ideaObj) {
     const newIdentifier = "idea" + Date.now();
-    db.serialize(() => {
+    return new Promise((resolve, reject) => {
+
+        db.run("BEGIN TRANSACTION");
+
         db.run(dbInsertIdea, [ideaObj.title, ideaObj.description, ideaObj.status, newIdentifier], function (err) {
             if (err) {
-                console.error(err);
-                return;
+                db.run("ROLLBACK");
+                reject({
+                    message: "Error creating idea.",
+                    error: err
+                });
             }
-            console.log("New ID:", this.lastID);
+            db.run(dbInsertProgress, [ideaObj.progress, ideaObj.estimation, newIdentifier], function (err) {
+                if (err) {
+                    db.run("ROLLBACK");
+                    reject({
+                        message: "Error creating progress.",
+                        error: err
+                    });
+                }
+
+                db.run("COMMIT", (err) => {
+
+                    if (err) {
+                        db.run("ROLLBACK");
+                        reject({
+                            message: "Error commiting data during creation.",
+                            error: err
+                        });
+                    }
+                })
+
+                resolve({
+                    message: "New idea created.",
+                    id: newIdentifier
+                })
+            });
         });
-        db.run(dbInsertProgress, [ideaObj.progress, ideaObj.estimation], function (err) {
-            if (err) {
-                console.error(err);
-                return;
-            }
-            console.log("Progress added.");
-        });
-
-    })
-}
-
-function updateIdea(ideaId, ideaVals) {
-
-    db.run(dbUpdateIdea, [ideaVals.title, ideaVals.description, ideaVals.status], function (err) {
-        if (err) {
-            console.error(err);
-            return;
-        }
-
-        console.log("New ID:", this.lastID);
     });
 }
 
+
+function updateIdeaDB(ideaId, ideaVals, progressVals) {
+
+    return new Promise((resolve, reject) => {
+
+        db.run("BEGIN TRANSACTION");
+
+        db.run(dbUpdateIdea, [ideaVals.title, ideaVals.description, ideaVals.status], function (err) {
+            if (err) {
+                db.run("ROLLBACK");
+                reject({
+                    message: "Idea update error.",
+                    error: err
+                });
+            }
+
+            db.run(dbUpdateProgress, [progressVals.progress, progressVals.estimation], function (err) {
+                if (err) {
+                    db.run("ROLLBACK");
+                    reject({
+                        message: "Progress update error.",
+                        error: err
+                    });
+                }
+
+                db.run("COMMIT", (err) => {
+
+                    if (err) {
+                        db.run("ROLLBACK");
+                        reject({
+                            message: "Error commiting data during update.",
+                            error: err
+                        });
+                    }
+                })
+
+                resolve({
+                    message: "Idea updated successfully.",
+                    id: ideaId
+                })
+            })
+
+        });
+    })
+}
+
 module.exports = {
-    retrieveDBData,
-    createIdea,
-    updateIdea
+    retrieveDataDB,
+    createIdeaDB,
+    updateIdeaDB
 }

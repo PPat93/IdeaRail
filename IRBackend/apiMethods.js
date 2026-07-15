@@ -1,25 +1,32 @@
-const {retrieveDBData, createIdea} = require("../IRDB/dbOps.cjs");
+const {retrieveDataDB, createIdeaDB, updateIdeaDB} = require("../IRDB/dbOps.cjs");
 
 function getAllIdeas() {
-    retrieveDBData().then((ideas) => {
+    retrieveDataDB().then((ideas) => {
         // TODO sanitize ideas
     })
 }
 
 function getSingleIdea(ideaId) {
-    retrieveDBData(ideaId).then((idea) => {
+    retrieveDataDB(ideaId).then((idea) => {
         //TODO sanitize idea
     })
 }
 
-function createNewIdea(ideaVals) {
-    createIdea(ideaVals);
+function createIdea(ideaVals) {
+    createIdeaDB(ideaVals).then((result) => {
+
+    })
 }
 
-function updateIdea(ideaId, ideaVals) {
+function updateIdea(ideaId, ideaVals, progressVals) {
+    updateIdeaDB(ideaId, ideaVals, progressVals).then((result) => {
+
+    })
     // ideaVals.title
     // ideaVals.description
     // ideaVals.status
+    // progressVals.progress
+    // progressVals.estimation
 
 }
 
@@ -30,7 +37,7 @@ function deleteIdea(ideaId) {
 module.exports = {
     getAllIdeas,
     getSingleIdea,
-    createNewIdea,
+    createIdea,
     updateIdea,
     deleteIdea
 }
