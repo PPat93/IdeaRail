@@ -1,4 +1,4 @@
-const {retrieveDataDB, createIdeaDB, updateIdeaDB} = require("../IRDB/dbOps.cjs");
+const {retrieveDataDB, createIdeaDB, updateIdeaDB, deleteIdeaDb} = require("../IRDB/dbOps.cjs");
 
 function getAllIdeas() {
     retrieveDataDB().then((ideas) => {
@@ -19,18 +19,22 @@ function createIdea(ideaVals) {
 }
 
 function updateIdea(ideaId, ideaVals, progressVals) {
-    updateIdeaDB(ideaId, ideaVals, progressVals).then((result) => {
 
-    })
     // ideaVals.title
     // ideaVals.description
     // ideaVals.status
     // progressVals.progress
     // progressVals.estimation
+    updateIdeaDB(ideaId, ideaVals, progressVals).then((result) => {
+
+    })
 
 }
 
 function deleteIdea(ideaId) {
+    deleteIdeaDb(ideaId).then((result) => {
+
+    })
 
 }
 

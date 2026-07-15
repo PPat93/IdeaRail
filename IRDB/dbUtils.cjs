@@ -6,6 +6,8 @@ const dbInsertIdea = "INSERT INTO ideas(title, description, status, identifier) 
 const dbInsertProgress = "INSERT INTO progress(progress, estimation, identifier) VALUES (?, ?, ?)";
 const dbUpdateIdea = "UPDATE ideas SET title = ?, description = ?, status = ? WHERE identifier = ?";
 const dbUpdateProgress = "UPDATE progress SET progress = ?, estimation = ? WHERE identifier = ?";
+const dbDeleteIdea = "DELETE FROM ideas WHERE id = ?"
+const dbDeleteProgress = "DELETE FROM progress WHERE id = ?"
 
 
 // DB init
@@ -43,11 +45,18 @@ function dbInit() {
     })
 }
 
+function dbRollback(){
+    db.run("ROLLBACK");
+}
+
 module.exports = {
     db,
+    dbRollback,
     dbInsertIdea,
     dbUpdateIdea,
     dbInsertProgress,
     dbUpdateProgress,
-    dbInit,
+    dbDeleteIdea,
+    dbDeleteProgress,
+    dbInit
 }

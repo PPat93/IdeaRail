@@ -1,4 +1,13 @@
-const {db, dbInsertIdea, dbInsertProgress, dbUpdateIdea, dbUpdateProgress} = require("./dbUtils.cjs");
+const {
+    db,
+    dbInsertIdea,
+    dbInsertProgress,
+    dbUpdateIdea,
+    dbUpdateProgress,
+    dbDeleteIdea,
+    dbDeleteProgress,
+    dbRollback
+} = require("./dbUtils.cjs");
 
 function retrieveDataDB(ideaId) {
     let retrievedDataArg = "";
@@ -22,7 +31,7 @@ function createIdeaDB(ideaObj) {
 
         db.run(dbInsertIdea, [ideaObj.title, ideaObj.description, ideaObj.status, newIdentifier], function (err) {
             if (err) {
-                db.run("ROLLBACK");
+                dbRollback();
                 reject({
                     message: "Error creating idea.",
                     error: err
@@ -30,7 +39,7 @@ function createIdeaDB(ideaObj) {
             }
             db.run(dbInsertProgress, [ideaObj.progress, ideaObj.estimation, newIdentifier], function (err) {
                 if (err) {
-                    db.run("ROLLBACK");
+                    dbRollback();
                     reject({
                         message: "Error creating progress.",
                         error: err
@@ -40,9 +49,9 @@ function createIdeaDB(ideaObj) {
                 db.run("COMMIT", (err) => {
 
                     if (err) {
-                        db.run("ROLLBACK");
+                        dbRollback();
                         reject({
-                            message: "Error commiting data during creation.",
+                            message: "Error commiting data during creation commit.",
                             error: err
                         });
                     }
@@ -66,7 +75,7 @@ function updateIdeaDB(ideaId, ideaVals, progressVals) {
 
         db.run(dbUpdateIdea, [ideaVals.title, ideaVals.description, ideaVals.status], function (err) {
             if (err) {
-                db.run("ROLLBACK");
+                dbRollback();
                 reject({
                     message: "Idea update error.",
                     error: err
@@ -75,7 +84,7 @@ function updateIdeaDB(ideaId, ideaVals, progressVals) {
 
             db.run(dbUpdateProgress, [progressVals.progress, progressVals.estimation], function (err) {
                 if (err) {
-                    db.run("ROLLBACK");
+                    dbRollback();
                     reject({
                         message: "Progress update error.",
                         error: err
@@ -85,9 +94,9 @@ function updateIdeaDB(ideaId, ideaVals, progressVals) {
                 db.run("COMMIT", (err) => {
 
                     if (err) {
-                        db.run("ROLLBACK");
+                        dbRollback();
                         reject({
-                            message: "Error commiting data during update.",
+                            message: "Error commiting data during update commit.",
                             error: err
                         });
                     }
@@ -103,8 +112,51 @@ function updateIdeaDB(ideaId, ideaVals, progressVals) {
     })
 }
 
+function deleteIdeaDb(ideaId) {
+    return new Promise((resolve, reject) => {
+        db.run("BEGIN TRANSACTION");
+
+        db.run(dbDeleteIdea, [ideaId], function (err) {
+            if (err) {
+                dbRollback();
+                reject({
+                    message: "Error while deleting idea.",
+                    error: err
+                })
+            }
+
+            db.run(dbDeleteProgress, [ideaId], function (err) {
+                if (err) {
+                    dbRollback();
+                    reject({
+                        message: "Error while deleting progress.",
+                        error: err
+                    })
+                }
+
+                db.run("COMMIT", (err) => {
+
+                    if (err) {
+                        dbRollback();
+                        reject({
+                            message: "Error commiting data during deletion commit.",
+                            error: err
+                        });
+                    }
+                })
+
+                resolve({
+                    message: "Idea deleted successfully.",
+                    id: ideaId
+                })
+            })
+        })
+    })
+}
+
 module.exports = {
     retrieveDataDB,
     createIdeaDB,
-    updateIdeaDB
+    updateIdeaDB,
+    deleteIdeaDb
 }
